@@ -1,5 +1,12 @@
 import express, { Request, Response } from "express";
 import { tasks } from "./tasks";
+import { Task } from "./models/task";
+import { v4 as uuidv4 } from "uuid";
+
+interface CreateTaskBody {
+  name: string;
+  description: string;
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,6 +15,30 @@ app.use(express.json());
 
 app.get("/tasks", (req: Request, res: Response) => {
   res.json(tasks);
+});
+
+app.post("/tasks", (req: Request, res: Response) => {
+  const { name, description } = req.body;
+
+  const invalid = [name, description].some(
+    (element) => typeof element !== "string" || element.trim() === ""
+  );
+
+  if (invalid) {
+    return res.status(400).json({ message: "Invalid task data" });
+  }
+
+  const newTask: Task = {
+    id: uuidv4(),
+    name,
+    description,
+    status: "pending",
+    createdAt: new Date(),
+  };
+
+  tasks.push(newTask);
+
+  return res.status(201).json(newTask);
 });
 
 app.listen(PORT, () => {

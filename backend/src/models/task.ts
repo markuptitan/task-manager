@@ -4,5 +4,5 @@ export interface Task {
   description: string;
   status: "pending" | "in-progress" | "completed";
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
