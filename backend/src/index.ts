@@ -28,6 +28,18 @@ app.post("/tasks", (req: Request, res: Response) => {
     return res.status(400).json({ message: "Invalid task data" });
   }
 
+  const duplicate = tasks.some(
+    (task) =>
+      task.name.toLowerCase() === name.toLowerCase() ||
+      task.description.toLowerCase() === description.toLowerCase()
+  );
+
+  if (duplicate) {
+    return res
+      .status(409)
+      .json({ message: "Task with same name or description already exists" });
+  }
+
   const newTask: Task = {
     id: uuidv4(),
     name,
