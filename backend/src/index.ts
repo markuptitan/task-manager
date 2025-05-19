@@ -65,6 +65,43 @@ app.post("/tasks", (req: Request, res: Response) => {
   return res.status(201).json(newTask);
 });
 
+app.put("/task/:id", (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name, description, status } = req.body;
+
+  const taskIndex = tasks.findIndex((task) => task.id === id);
+
+  if (taskIndex === -1) {
+    return res.status(404).json({ message: "Task not found" });
+  }
+
+  const updatedTask: Task = {
+    ...tasks[taskIndex],
+    name,
+    description,
+    status,
+    updatedAt: new Date(),
+  };
+
+  tasks[taskIndex] = updatedTask;
+
+  return res.json(updatedTask);
+});
+
+app.delete("/task/:id", (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const taskIndex = tasks.findIndex((task) => task.id === id);
+
+  if (taskIndex === -1) {
+    return res.status(404).json({ message: "Task not found" });
+  }
+
+  tasks.splice(taskIndex, 1);
+
+  return res.status(204).send();
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
