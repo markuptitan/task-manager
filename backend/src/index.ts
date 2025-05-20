@@ -17,7 +17,7 @@ app.get("/tasks", (req: Request, res: Response) => {
   res.json(tasks);
 });
 
-app.get("/task/:id", (req: Request, res: Response) => {
+app.get("/tasks/:id", (req: Request, res: Response) => {
   const { id } = req.params;
 
   const task = tasks.find((task) => task.id === id);
@@ -65,7 +65,7 @@ app.post("/tasks", (req: Request, res: Response) => {
   return res.status(201).json(newTask);
 });
 
-app.put("/task/:id", (req: Request, res: Response) => {
+app.put("/tasks/:id", (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, description, status } = req.body;
 
@@ -88,7 +88,7 @@ app.put("/task/:id", (req: Request, res: Response) => {
   return res.json(updatedTask);
 });
 
-app.delete("/task/:id", (req: Request, res: Response) => {
+app.delete("/tasks/:id", (req: Request, res: Response) => {
   const { id } = req.params;
 
   const taskIndex = tasks.findIndex((task) => task.id === id);
